@@ -2,6 +2,7 @@ require 'redmine'
 
 require 'redmine_multiuser_timelog/hooks/timelog_hooks'
 require 'redmine_multiuser_timelog/patches/timelog_helper_patch'
+require 'redmine_multiuser_timelog/patches/timelog_controller_patch'
 
 Redmine::Plugin.register :redmine_multiuser_timelog do
   name 'Multiple User Timelog plugin'
