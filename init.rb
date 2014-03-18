@@ -1,7 +1,6 @@
-ActionDispatch::Callbacks.to_prepare do
-    # use require_dependency if you plan to utilize development mode
-    require 'redmine_multiuser_timelog/hooks/timelog_hooks'
-end
+require 'redmine'
+
+require_dependency 'redmine_multiuser_timelog/hooks/timelog_hooks'
 
 Redmine::Plugin.register :redmine_multiuser_timelog do
   name 'Multiple User Timelog plugin'
@@ -12,6 +11,6 @@ Redmine::Plugin.register :redmine_multiuser_timelog do
   author_url 'https://github.com/thambley'
   
   project_module :time_tracking do
-    permission :manage_time, {:timelog => [:new, :create]}, :require => :member
+    permission :manage_time_entries, {:timelog => [:new, :create]}, :require => :member
   end
 end
