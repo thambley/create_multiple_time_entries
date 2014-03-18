@@ -1,15 +1,17 @@
 ActionDispatch::Callbacks.to_prepare do
     # use require_dependency if you plan to utilize development mode
-    require 'create_multiple_time_entries/hooks/timelog_hooks'
+    require 'redmine_multiuser_timelog/hooks/timelog_hooks'
 end
 
-Redmine::Plugin.register :create_multiples_time_entries do
-  name 'Create Multiples Time Entries plugin'
-  author 'Integra Consultores'
+Redmine::Plugin.register :redmine_multiuser_timelog do
+  name 'Multiple User Timelog plugin'
+  author 'Integra Consultores, Todd Hambley'
   description 'This plugin allows an authorized user to log time for multiple users simultaneously'
   version '0.0.1'
-  url 'https://github.com/integra-consultores/create_multiple_time_entries'
-  author_url 'https://github.com/integra-consultores'
+  url 'https://github.com/thambley/redmine_multiuser_timelog'
+  author_url 'https://github.com/thambley'
   
-  permission :create_multiples_time_entries, { :bulk_time_entries => [:new, :create]}, :require => :member
+  project_module :time_tracking do
+    permission :manage_time, {:timelog => [:new, :create]}, :require => :member
+  end
 end

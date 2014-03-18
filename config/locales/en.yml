@@ -2,5 +2,5 @@
 en:
   field_users: Users
   field_user_ids: Users
-  label_create_multiple_time_entries: Log time massively
-  permission_create_multiples_time_entries: Log time massively
+  label_multiuser_timelog: Log time for multiple users
+  permission_manage_time: Log time for project members
