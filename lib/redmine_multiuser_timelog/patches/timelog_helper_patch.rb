@@ -1,19 +1,15 @@
-require_dependency 'timelog_helper'
+require 'timelog_helper'
 
 module RedmineMultiuserTimelog
-  module UsersHelper
-    
-    def self.included(base) # :nodoc:
-      base.send(:include, InstanceMethods)
-    end
+  module Patches
+    module TimelogHelperPatch
 
-    module InstanceMethods
       def user_collection_for_select_options(project, selected = nil)
         collection =  project.members.map{|member| member.user }.sort
         collection.keep_if{|user| user.allowed_to?(:log_time, project)}    
         
         s = ''
-
+        
         collection.sort.each do |element|
           selected_attribute = ' selected="selected"' if option_value_selected?(element, selected)
           s << %(<option value="#{element.id}"#{selected_attribute}>#{h element.name}</option>)
@@ -21,9 +17,14 @@ module RedmineMultiuserTimelog
         
         s.html_safe
       end
+      
     end
-    
   end
 end
 
-TimelogHelper.send(:include, RedmineMultiuserTimelog::UsersHelper)
+# Apply patch
+Rails.configuration.to_prepare do
+  unless TimelogHelper.included_modules.include?(RedmineMultiuserTimelog::Patches::TimelogHelperPatch)
+    TimelogHelper.send(:include, RedmineMultiuserTimelog::Patches::TimelogHelperPatch)
+  end
+end
