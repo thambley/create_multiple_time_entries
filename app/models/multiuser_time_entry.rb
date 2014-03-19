@@ -14,6 +14,7 @@ class MultiuserTimeEntry < TimeEntry
     (@user_ids || []).each do |user_id|
       time_entry = TimeEntry.new(:project => project, :user => User.find(user_id))
       time_entry.safe_attributes = self.attributes
+      time_entry.custom_field_values = self.custom_field_values.inject({}) {|h,v| h[v.custom_field_id] = v.value; h}
       @time_entries << time_entry
     end
     
@@ -36,6 +37,10 @@ class MultiuserTimeEntry < TimeEntry
     else
       false
     end
+  end
+  
+  def available_custom_fields
+    CustomField.where("type = 'TimeEntryCustomField'").sorted.all
   end
   
   private
