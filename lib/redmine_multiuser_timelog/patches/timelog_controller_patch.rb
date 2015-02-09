@@ -18,7 +18,11 @@ module RedmineMultiuserTimelog
           #logger.info "create_with_multiuser_timelog #{params[:time_entry][:user_ids]}"
           if request.post? and User.current.allowed_to?(:manage_time_entries, @project)
             @time_entry ||= MultiuserTimeEntry.new(:project => @project)
-            @time_entry.safe_attributes = params[:time_entry]
+            time_entry_params = params[:time_entry]
+            if params.has_key?(:multiuser_time_entry)
+              time_entry_params.merge!(params[:multiuser_time_entry])
+            end
+            @time_entry.safe_attributes = time_entry_params
                 
             if @time_entry.save { |time_entry| call_hook(:controller_timelog_edit_before_save, { :params => params, :time_entry => time_entry })}
                respond_to do |format|
