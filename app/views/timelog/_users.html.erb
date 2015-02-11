@@ -1,6 +1,6 @@
 <% if @time_entry.new_record? && User.current.allowed_to?(:manage_time_entries, @project) %>
   <p>
     <%= label_tag :users, l(:field_users) %>
-    <%= select_tag "time_entry[user_ids][]", user_collection_for_select_options(@project, ((@time_entry.respond_to?(:users)) ? @time_entry.users : @time_entry.user)) , :multiple => true %>
+    <%= select_tag "time_entry[user_ids][]", user_collection_for_select_options(@project, ((@time_entry.respond_to?(:users) && @time_entry.users.length > 0) ? @time_entry.users : @time_entry.user)) , :multiple => true %>
   </p>
 <% end %>

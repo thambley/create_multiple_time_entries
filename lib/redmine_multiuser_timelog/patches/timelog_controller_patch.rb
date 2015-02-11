@@ -16,7 +16,7 @@ module RedmineMultiuserTimelog
       module InstanceMethods
         def new_with_multiuser_timelog
           if User.current.allowed_to?(:manage_time_entries, @project)
-            @time_entry ||= MultiuserTimeEntry.new(:project => @project, :issue => @issue, :spent_on => User.current.today)
+            @time_entry ||= MultiuserTimeEntry.new(:project => @project, :issue => @issue, :user => User.current, :spent_on => User.current.today)
           end
           new_without_multiuser_timelog
         end
