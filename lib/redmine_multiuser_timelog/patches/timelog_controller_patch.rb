@@ -8,11 +8,18 @@ module RedmineMultiuserTimelog
         base.send(:include, InstanceMethods)
 
         base.class_eval do
+          alias_method_chain :new, :multiuser_timelog
           alias_method_chain :create, :multiuser_timelog
         end
       end
 
       module InstanceMethods
+        def new_with_multiuser_timelog
+          if User.current.allowed_to?(:manage_time_entries, @project)
+            @time_entry ||= MultiuserTimeEntry.new(:project => @project, :issue => @issue, :spent_on => User.current.today)
+          end
+          new_without_multiuser_timelog
+        end
       
         def create_with_multiuser_timelog
           #logger.info "create_with_multiuser_timelog #{params[:time_entry][:user_ids]}"
